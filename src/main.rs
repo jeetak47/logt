@@ -48,7 +48,7 @@ fn main() {
       let mut file_path: Option<String> = None;
       if args.auto_file{
         let now = Utc::now();
-        file_path=Option::Some(format!("{}{}{:01}{:02}",now.month(),now.day(),now.minute(),now.hour()));
+        file_path=Option::Some(format!("{}{}{:01}{:02}",now.day(),now.month(),now.hour(),now.minute()));
         //println!("Auto file name {}",file_path.unwrap());
         //file_name=
       }else if !args.file.is_none(){

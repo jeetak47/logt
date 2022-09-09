@@ -5,8 +5,8 @@ use clap::Parser;
 use std::path::PathBuf;
 use chrono::{Datelike, Timelike, Utc};
 use std::fs::File;
-fn print_log(data: String) -> Option<String> {
-    let success= serde_json::from_str(&data);
+fn print_log(data: &String) -> Option<String> {
+    let success= serde_json::from_str(data);
     if success.is_ok(){
       let v: Value = success.unwrap(); 
     let level = color_level(if !v["level"].is_null() {v["level"].as_str().unwrap()} else{""});
@@ -17,7 +17,7 @@ fn print_log(data: String) -> Option<String> {
     let d=format!("{} {} {} {}:{} ", timestamp,level,logger,message,stack);
     Some(d)
     }else {
-    Some(data)
+    Some(data.to_string())
     }
     // Access parts of the data by indexing with square brackets.
 }
@@ -65,13 +65,13 @@ fn main() {
     }
     for line in stdin.lock().lines() {
       let sline =line.unwrap();
-      let result=  print_log(sline);
+      let result=  print_log(&sline);
       if result.is_some() {
         println!("{}", result.as_ref().unwrap());        
+      } 
       if let Some(ref mut file) = output {
-        writeln!(file,"{}", result.as_ref().unwrap()).expect("file not found");
-    } 
-    } 
+        writeln!(file,"{}", &sline).expect("file not found");
+      } 
     }
    
 }
